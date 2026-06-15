@@ -40,7 +40,7 @@ source("R/functions.R")
 # =============================================================================
 
 cat("=============================================================\n")
-cat("ecoRxChoice Worked Example\n")
+cat("Antimicrobial Emissions Calculator Worked Example\n")
 cat("Reproducing Hojat et al., OFID 2025, Figure 2B\n")
 cat("=============================================================\n\n")
 
