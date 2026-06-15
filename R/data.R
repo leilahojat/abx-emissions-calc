@@ -49,7 +49,7 @@ antibiotic_factors <- data.frame(
     "Amikacin",
     "Amphotericin B liposomal",
     "Ampicillin",
-    "Ampicillin-sulbactam",
+    "Ampicillin/sulbactam",
     "Azithromycin",
     "Aztreonam",
     "Caspofungin",
@@ -59,8 +59,8 @@ antibiotic_factors <- data.frame(
     "Cefoxitin",
     "Ceftaroline",
     "Ceftazidime",
-    "Ceftazidime-avibactam",
-    "Ceftolozane-tazobactam",
+    "Ceftazidime/avibactam",
+    "Ceftolozane/tazobactam",
     "Ceftriaxone",
     "Cefuroxime",
     "Ciprofloxacin",
@@ -73,82 +73,82 @@ antibiotic_factors <- data.frame(
     "Fluconazole",
     "Ganciclovir",
     "Gentamicin",
-    "Imipenem-cilastatin",
+    "Imipenem/cilastatin",
     "Isavuconazonium",
     "Levofloxacin",
     "Linezolid",
     "Meropenem",
-    "Meropenem-vaborbactam",
+    "Meropenem/vaborbactam",
     "Metronidazole",
     "Micafungin",
     "Minocycline",
     "Nafcillin",
     "Penicillin",
     "Pentamidine",
-    "Piperacillin-tazobactam",
+    "Piperacillin/tazobactam",
     "Posaconazole",
     "Remdesivir",
     "Rifampin",
-    "Sulfamethoxazole-trimethoprim",
+    "Sulfamethoxazole/trimethoprim",
     "Tigecycline",
     "Vancomycin"
   ),
   nhsn_name = c(
-    "Acyclovir",
-    "Amikacin",
-    "Amphotericin B liposomal",
-    "Ampicillin",
-    "Ampicillin-sulbactam",
-    "Azithromycin",
-    "Aztreonam",
-    "Caspofungin",
-    "Cefazolin",
-    "Cefepime",
-    "Cefiderocol",
-    "Cefoxitin",
-    "Ceftaroline",
-    "Ceftazidime",
-    "Ceftazidime-avibactam",
-    "Ceftolozane-tazobactam",
-    "Ceftriaxone",
-    "Cefuroxime",
-    "Ciprofloxacin",
-    "Clindamycin",
-    "Colistimethate",
-    "Daptomycin",
-    "Doxycycline",
-    "Ertapenem",
-    "Erythromycin",
-    "Fluconazole",
-    "Ganciclovir",
-    "Gentamicin",
-    "Imipenem-cilastatin",
-    "Isavuconazonium",
-    "Levofloxacin",
-    "Linezolid",
-    "Meropenem",
-    "Meropenem-vaborbactam",
-    "Metronidazole",
-    "Micafungin",
-    "Minocycline",
-    "Nafcillin",
-    "Penicillin",
-    "Pentamidine",
-    "Piperacillin-tazobactam",
-    "Posaconazole",
-    "Remdesivir",
-    "Rifampin",
-    "Sulfamethoxazole-trimethoprim",
-    "Tigecycline",
-    "Vancomycin"
+    "ACYCLOVIR",
+    "AMIKACIN",
+    "AMPHOTERICIN B LIPOSOMAL",
+    "AMPICILLIN",
+    "AMPICILLIN/SULBACTAM",
+    "AZITHROMYCIN",
+    "AZTREONAM",
+    "CASPOFUNGIN",
+    "CEFAZOLIN",
+    "CEFEPIME",
+    "CEFIDEROCOL",
+    "CEFOXITIN",
+    "CEFTAROLINE",
+    "CEFTAZIDIME",
+    "CEFTAZIDIME/AVIBACTAM",
+    "CEFTOLOZANE/TAZOBACTAM",
+    "CEFTRIAXONE",
+    "CEFUROXIME",
+    "CIPROFLOXACIN",
+    "CLINDAMYCIN",
+    "COLISTIMETHATE",
+    "DAPTOMYCIN",
+    "DOXYCYCLINE",
+    "ERTAPENEM",
+    "ERYTHROMYCIN",
+    "FLUCONAZOLE",
+    "GANCICLOVIR",
+    "GENTAMICIN",
+    "IMIPENEM/CILASTATIN",
+    "ISAVUCONAZONIUM",
+    "LEVOFLOXACIN",
+    "LINEZOLID",
+    "MEROPENEM",
+    "MEROPENEM/VABORBACTAM",
+    "METRONIDAZOLE",
+    "MICAFUNGIN",
+    "MINOCYCLINE",
+    "NAFCILLIN",
+    "PENICILLIN",
+    "PENTAMIDINE",
+    "PIPERACILLIN/TAZOBACTAM",
+    "POSACONAZOLE",
+    "REMDESIVIR",
+    "RIFAMPIN",
+    "SULFAMETHOXAZOLE/TRIMETHOPRIM",
+    "TIGECYCLINE",
+    "VANCOMYCIN"
   ),
-  route = rep("IV", 14),
+  route = rep("IV", 47),
   co2e_per_dot_mt = c(
     NA_real_,       # Acyclovir           -- see Supp. Table 6
     NA_real_,       # Amikacin            -- see Supp. Table 6
     NA_real_,       # Amphotericin B lip. -- see Supp. Table 6
     NA_real_,       # Ampicillin          -- see Supp. Table 6
-    NA_real_,       # Ampicillin-sul.     -- see Supp. Table 6
+    NA_real_,       # Ampicillin/sul.     -- see Supp. Table 6
     NA_real_,       # Azithromycin        -- see Supp. Table 6
     NA_real_,       # Aztreonam           -- see Supp. Table 6
     NA_real_,       # Caspofungin         -- see Supp. Table 6
@@ -158,8 +158,8 @@ antibiotic_factors <- data.frame(
     NA_real_,       # Cefoxitin           -- see Supp. Table 6
     NA_real_,       # Ceftaroline         -- see Supp. Table 6
     NA_real_,       # Ceftazidime         -- see Supp. Table 6
-    NA_real_,       # Ceftazidime-avi.    -- see Supp. Table 6
-    NA_real_,       # Ceftolozane-tazo.   -- see Supp. Table 6
+    NA_real_,       # Ceftazidime/avi.    -- see Supp. Table 6
+    NA_real_,       # Ceftolozane/tazo.   -- see Supp. Table 6
     NA_real_,       # Ceftriaxone         -- see Supp. Table 6
     NA_real_,       # Cefuroxime          -- see Supp. Table 6
     NA_real_,       # Ciprofloxacin       -- see Supp. Table 6
@@ -172,30 +172,30 @@ antibiotic_factors <- data.frame(
     NA_real_,       # Fluconazole         -- see Supp. Table 6
     NA_real_,       # Ganciclovir         -- see Supp. Table 6
     NA_real_,       # Gentamicin          -- see Supp. Table 6
-    NA_real_,       # Imipenem-cilastatin -- see Supp. Table 6
+    NA_real_,       # Imipenem/cilastatin -- see Supp. Table 6
     NA_real_,       # Isavuconazonium     -- see Supp. Table 6
     NA_real_,       # Levofloxacin        -- see Supp. Table 6
     NA_real_,       # Linezolid           -- see Supp. Table 6
     NA_real_,       # Meropenem           -- see Supp. Table 6
-    NA_real_,       # Meropenem-vabor.    -- see Supp. Table 6
+    NA_real_,       # Meropenem/vabor.    -- see Supp. Table 6
     NA_real_,       # Metronidazole       -- see Supp. Table 6
     NA_real_,       # Micafungin          -- see Supp. Table 6
     NA_real_,       # Minocycline         -- see Supp. Table 6
     NA_real_,       # Nafcillin           -- see Supp. Table 6
     NA_real_,       # Penicillin          -- see Supp. Table 6
     NA_real_,       # Pentamidine         -- see Supp. Table 6
-    NA_real_,       # Piperacillin-tazo.  -- see Supp. Table 6
+    NA_real_,       # Piperacillin/tazo.  -- see Supp. Table 6
     NA_real_,       # Posaconazole        -- see Supp. Table 6
     NA_real_,       # Remdesivir          -- see Supp. Table 6
     NA_real_,       # Rifampin            -- see Supp. Table 6
-    NA_real_,       # SMX-TMP             -- see Supp. Table 6
+    NA_real_,       # SMX/TMP             -- see Supp. Table 6
     NA_real_,       # Tigecycline         -- see Supp. Table 6
     2.564814857e-05 # Vancomycin -- Hojat et al. Fig 2B: 875 DOT = 0.0224421300 mt CO2e
     #              back-calculated: 0.0224421300 / 875
   ),
   source = rep(
     "Hojat et al., Open Forum Infect Dis. 2025;12(10):ofaf308. Supplementary Table 6.",
-    14
+    47
   ),
   stringsAsFactors = FALSE
 )
