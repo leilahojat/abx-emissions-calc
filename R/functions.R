@@ -221,7 +221,7 @@ list_drugs <- function() {
 summarize_emissions <- function(emissions_result, drug_name = NULL, dot = NULL) {
   if (!is.null(drug_name) && !is.null(dot)) {
     cat(sprintf(
-      "\n--- ecoRxChoice Emissions Estimate ---\n%s: %s DOT\n",
+      "\n--- Antimicrobial Emissions Estimate ---\n%s: %s DOT\n",
       drug_name, format(dot, big.mark = ",")
     ))
   }
@@ -233,6 +233,5 @@ summarize_emissions <- function(emissions_result, drug_name = NULL, dot = NULL) 
   cat(sprintf("  Pounds of coal burned:             %.1f\n",  emissions_result["pounds_coal"]))
   cat(sprintf("  Smartphones charged:               %.0f\n",  emissions_result["phones_charged"]))
   cat(sprintf("\nSource: Hojat et al., Open Forum Infect Dis. 2025;12(10):ofaf308.\n"))
-  cat(sprintf("Tool:   https://ecorxchoice.com\n\n"))
   invisible(emissions_result)
 }
