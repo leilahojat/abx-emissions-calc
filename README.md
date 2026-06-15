@@ -197,6 +197,5 @@ MIT License. See [LICENSE](LICENSE).
 
 Leila S. Hojat, MD, MS  
 Division of Infectious Diseases, Emory University School of Medicine  
-Medical Director, Antimicrobial Stewardship, Emory University Hospital Midtown 
+Medical Director, Antimicrobial Stewardship, Emory University Hospital Midtown  
 Leila.Susan.Hojat@emory.edu
-Leila.S.Hojat@gmail.com
