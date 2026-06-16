@@ -26,9 +26,9 @@
 # =============================================================================
 
 # Load data and functions
-# Run from the repo root (ecorxchoice-calculator/) or set your working
+# Run from the repo root (abx-emissions-calc/) or set your working
 # directory there before sourcing:
-#   setwd("/path/to/ecorxchoice-calculator")
+#   setwd("/path/to/abx-emissions-calc")
 #   source("R/example.R")
 source("R/data.R")
 source("R/functions.R")
@@ -61,6 +61,7 @@ cat("--- Validation against published values (Hojat et al. Fig 2B) ---\n\n")
 
 published <- c(
   co2e_mt        = 0.0224421300,
+  waste_kg       = 246.90909,
   miles_driven   = 57.39675,
   gallons_gas    = 2.52528,
   pounds_coal    = 24.74325,
@@ -70,6 +71,7 @@ published <- c(
 check_fields <- names(published)
 tolerance    <- list(
   co2e_mt        = 1e-5,
+  waste_kg       = 1.0,
   miles_driven   = 0.1,
   gallons_gas    = 0.05,
   pounds_coal    = 0.1,
@@ -93,20 +95,17 @@ cat("\n")
 if (all_pass) {
   cat("All values match published results within tolerance. Validation passed.\n\n")
 } else {
-  cat("One or more values exceed tolerance. Check antibiotic_factors and ghg_factors in data.R.\n\n")
+  cat("One or more values exceed tolerance. Check antimicrobial_factors and ghg_factors in data.R.\n\n")
 }
 
 
 # =============================================================================
 # EXAMPLE 2: Facility-level calculation
 # Hypothetical quarterly stewardship program report
-# (only vancomycin is fully populated in this version; other drugs
-#  require values from Supplementary Table 6, Hojat et al. OFID 2025)
 # =============================================================================
 
 cat("=============================================================\n")
 cat("Facility-Level Example: Quarterly Antimicrobial Use\n")
-cat("(Vancomycin only -- other factors pending Supp. Table 6)\n")
 cat("=============================================================\n\n")
 
 # Example: quarterly DOT data from an NHSN AU module export
@@ -122,7 +121,7 @@ facility_result <- calculate_facility_emissions(quarterly_use)
 
 # Display selected columns
 display_cols <- c("drug_name", "dot", "co2e_mt", "co2e_kg",
-                  "miles_driven", "phones_charged")
+                  "waste_kg", "miles_driven", "phones_charged")
 print(facility_result[, display_cols], row.names = FALSE)
 
 cat(sprintf(
@@ -135,8 +134,9 @@ cat(sprintf(
   facility_result[facility_result$drug_name == "TOTAL", "miles_driven"]
 ))
 
-cat("To add additional drugs: populate co2e_per_dot_mt values in R/data.R\n")
-cat("using Supplementary Table 6 from doi:10.1093/ofid/ofaf308\n\n")
+cat("To add drugs not currently in the calculator: add a new row to\n")
+cat("antimicrobial_factors in R/data.R with the drug name, NHSN name,\n")
+cat("route, and co2e_per_dot_mt value with a documented source.\n\n")
 
 
 # =============================================================================
@@ -164,3 +164,5 @@ cat(sprintf("  %.6f metric tons CO2e\n",   avoided_emissions["co2e_mt"]))
 cat(sprintf("  equivalent to %.1f miles driven\n\n", avoided_emissions["miles_driven"]))
 cat("Note: Full IV-to-PO emissions comparison requires cradle-to-grave LCA\n")
 cat("data for oral formulations, which are in development (v2.0).\n\n")
+
+
