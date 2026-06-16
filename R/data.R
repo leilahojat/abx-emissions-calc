@@ -3,7 +3,7 @@
 # File: R/data.R
 #
 # Two data frames used by the Antimicrobial Carbon Emissions calculator:
-#   antibiotic_factors  -- CO2e per day of therapy (DOT) for each drug
+#   antimicrobial_factors  -- CO2e per day of therapy (DOT) for each drug
 #   ghg_factors         -- GHG equivalency conversion factors
 #
 # Scope: End-of-life emissions only (packaging, preparation, and
@@ -19,14 +19,17 @@
 #   Setting. Open Forum Infect Dis. 2025;12(10):ofaf308.
 #   https://doi.org/10.1093/ofid/ofaf308
 #
-# Emissions factors: Supplementary Table 6, Hojat et al. OFID 2025
-# GHG equivalency factors: U.S. EPA GHG Emission Factors Hub (2024)
+#   Emissions factors: Antimicrobial_Emissions_Calculator Reference tab 
+#   (Supplementary data from Hojat et al. OFID 2025)
+#
+# GHG equivalency factors source:
+#   U.S. EPA GHG Emission Factors Hub (2024)
 #   https://www.epa.gov/climateleadership/ghg-emission-factors-hub
 # =============================================================================
 
 
 # ------------------------------------------------------------------------------
-# antibiotic_factors
+# antimicrobial_factors
 # ------------------------------------------------------------------------------
 # drug_name       : Drug name as used in the calculator
 # nhsn_name       : Name as it appears in NHSN antimicrobial use (AU) data
@@ -35,15 +38,10 @@
 #                   in metric tons CO2e. Based on average materials at two
 #                   large academic medical centers (Cleveland, OH and
 #                   Salt Lake City, UT).
-# source          : Data source
-#
-# Note: Values marked NA_real_ are present in the DOT Calculator but require
-# population from Supplementary Table 6 of Hojat et al. OFID 2025.
-# The supplementary Excel file is available at the journal website.
-# The vancomycin value is confirmed from Figure 2B of the paper
-# (875 DOT = 0.0224421300 metric tons CO2e; per-DOT rate derived from this).
+# source          : Primary source
 
-antibiotic_factors <- data.frame(
+
+antimicrobial_factors <- data.frame(
   drug_name = c(
     "Acyclovir",
     "Amikacin",
@@ -93,6 +91,7 @@ antibiotic_factors <- data.frame(
     "Tigecycline",
     "Vancomycin"
   ),
+  
   nhsn_name = c(
     "ACYCLOVIR",
     "AMIKACIN",
@@ -142,81 +141,124 @@ antibiotic_factors <- data.frame(
     "TIGECYCLINE",
     "VANCOMYCIN"
   ),
+  
   route = rep("IV", 47),
   co2e_per_dot_mt = c(
-    NA_real_,       # Acyclovir           -- see Supp. Table 6
-    NA_real_,       # Amikacin            -- see Supp. Table 6
-    NA_real_,       # Amphotericin B lip. -- see Supp. Table 6
-    NA_real_,       # Ampicillin          -- see Supp. Table 6
-    NA_real_,       # Ampicillin/sul.     -- see Supp. Table 6
-    NA_real_,       # Azithromycin        -- see Supp. Table 6
-    NA_real_,       # Aztreonam           -- see Supp. Table 6
-    NA_real_,       # Caspofungin         -- see Supp. Table 6
-    NA_real_,       # Cefazolin           -- see Supp. Table 6
-    NA_real_,       # Cefepime            -- see Supp. Table 6
-    NA_real_,       # Cefiderocol         -- see Supp. Table 6
-    NA_real_,       # Cefoxitin           -- see Supp. Table 6
-    NA_real_,       # Ceftaroline         -- see Supp. Table 6
-    NA_real_,       # Ceftazidime         -- see Supp. Table 6
-    NA_real_,       # Ceftazidime/avi.    -- see Supp. Table 6
-    NA_real_,       # Ceftolozane/tazo.   -- see Supp. Table 6
-    NA_real_,       # Ceftriaxone         -- see Supp. Table 6
-    NA_real_,       # Cefuroxime          -- see Supp. Table 6
-    NA_real_,       # Ciprofloxacin       -- see Supp. Table 6
-    NA_real_,       # Clindamycin         -- see Supp. Table 6
-    NA_real_,       # Colistimethate      -- see Supp. Table 6
-    NA_real_,       # Daptomycin          -- see Supp. Table 6
-    NA_real_,       # Doxycycline         -- see Supp. Table 6
-    NA_real_,       # Ertapenem           -- see Supp. Table 6
-    NA_real_,       # Erythromycin        -- see Supp. Table 6
-    NA_real_,       # Fluconazole         -- see Supp. Table 6
-    NA_real_,       # Ganciclovir         -- see Supp. Table 6
-    NA_real_,       # Gentamicin          -- see Supp. Table 6
-    NA_real_,       # Imipenem/cilastatin -- see Supp. Table 6
-    NA_real_,       # Isavuconazonium     -- see Supp. Table 6
-    NA_real_,       # Levofloxacin        -- see Supp. Table 6
-    NA_real_,       # Linezolid           -- see Supp. Table 6
-    NA_real_,       # Meropenem           -- see Supp. Table 6
-    NA_real_,       # Meropenem/vabor.    -- see Supp. Table 6
-    NA_real_,       # Metronidazole       -- see Supp. Table 6
-    NA_real_,       # Micafungin          -- see Supp. Table 6
-    NA_real_,       # Minocycline         -- see Supp. Table 6
-    NA_real_,       # Nafcillin           -- see Supp. Table 6
-    NA_real_,       # Penicillin          -- see Supp. Table 6
-    NA_real_,       # Pentamidine         -- see Supp. Table 6
-    NA_real_,       # Piperacillin/tazo.  -- see Supp. Table 6
-    NA_real_,       # Posaconazole        -- see Supp. Table 6
-    NA_real_,       # Remdesivir          -- see Supp. Table 6
-    NA_real_,       # Rifampin            -- see Supp. Table 6
-    NA_real_,       # SMX/TMP             -- see Supp. Table 6
-    NA_real_,       # Tigecycline         -- see Supp. Table 6
-    2.564814857e-05 # Vancomycin -- Hojat et al. Fig 2B: 875 DOT = 0.0224421300 mt CO2e
-    #              back-calculated: 0.0224421300 / 875
+    3.10863593E-05,       # Acyclovir           
+    2.80184602E-05,       # Amikacin            
+    1.80525618E-04,       # Amphotericin B lip. 
+    4.35468662E-05,       # Ampicillin          
+    3.56339690E-05,       # Ampicillin/sul.     
+    1.47005147E-05,       # Azithromycin        
+    2.92184578E-05,       # Aztreonam           
+    1.57622917E-05,       # Caspofungin         
+    1.72825650E-05,       # Cefazolin           
+    2.96338545E-05,       # Cefepime            
+    3.72227775E-05,       # Cefiderocol         
+    3.93990285E-05,       # Cefoxitin           
+    3.01575800E-05,       # Ceftaroline         
+    3.97428219E-05,       # Ceftazidime         
+    2.99623882E-05,       # Ceftazidime/avi.    
+    3.70235910E-05,       # Ceftolozane/tazo.   
+    1.10107340E-05,       # Ceftriaxone         
+    1.84975475E-05,       # Cefuroxime          
+    2.91381840E-05,       # Ciprofloxacin       
+    2.31142847E-05,       # Clindamycin         
+    2.50356217E-05,       # Colistimethate      
+    2.06897010E-05,       # Daptomycin          
+    2.02200883E-05,       # Doxycycline         
+    1.10432120E-05,       # Ertapenem           
+    3.11518319E-05,       # Erythromycin        
+    4.60988089E-05,       # Fluconazole         
+    2.40647597E-05,       # Ganciclovir         
+    2.49247054E-05,       # Gentamicin          
+    8.33154427E-05,       # Imipenem/cilastatin 
+    3.72358637E-05,       # Isavuconazonium     
+    2.50961215E-05,       # Levofloxacin        
+    1.07943820E-04,       # Linezolid           
+    3.09716583E-05,       # Meropenem           
+    6.13156657E-05,       # Meropenem/vabor.    
+    6.67585539E-05,       # Metronidazole       
+    8.22709120E-06,       # Micafungin          
+    1.66097297E-05,       # Minocycline         
+    5.60007197E-05,       # Nafcillin           
+    4.19661987E-05,       # Penicillin          
+    1.49881367E-05,       # Pentamidine         
+    3.69922605E-05,       # Piperacillin/tazo.  
+    1.49209606E-05,       # Posaconazole        
+    4.21235092E-05,       # Remdesivir          
+    5.37585630E-05,       # Rifampin            
+    4.88972277E-05,       # SMX/TMP             
+    1.76439567E-05,       # Tigecycline         
+    2.56481485E-05        # Vancomycin         
+  
   ),
-  source = rep(
-    "Hojat et al., Open Forum Infect Dis. 2025;12(10):ofaf308. Supplementary Table 6.",
-    47
+  
+  waste_kg_per_dot = c(
+    0.346,       # Acyclovir           
+    0.295,       # Amikacin            
+    0.792,       # Amphotericin B lip. 
+    0.531,       # Ampicillin          
+    0.367,       # Ampicillin/sul.     
+    0.195,       # Azithromycin        
+    0.332,       # Aztreonam           
+    0.211,       # Caspofungin         
+    0.207,       # Cefazolin           
+    0.258,       # Cefepime            
+    0.347,       # Cefiderocol         
+    0.471,       # Cefoxitin           
+    0.386,       # Ceftaroline         
+    0.460,       # Ceftazidime         
+    0.377,       # Ceftazidime/avi.    
+    0.404,       # Ceftolozane/tazo.   
+    0.172,       # Ceftriaxone         
+    0.292,       # Cefuroxime          
+    0.189,       # Ciprofloxacin       
+    0.167,       # Clindamycin         
+    0.279,       # Colistimethate      
+    0.239,       # Daptomycin          
+    0.265,       # Doxycycline         
+    0.206,       # Ertapenem           
+    0.412,       # Erythromycin        
+    0.188,       # Fluconazole         
+    0.261,       # Ganciclovir         
+    0.364,       # Gentamicin          
+    0.797,       # Imipenem/cilastatin 
+    0.226,       # Isavuconazonium     
+    0.170,       # Levofloxacin        
+    0.277,       # Linezolid           
+    0.444,       # Meropenem           
+    0.821,       # Meropenem/vabor.    
+    0.261,       # Metronidazole       
+    0.195,       # Micafungin          
+    0.263,       # Minocycline         
+    0.325,       # Nafcillin           
+    0.210,       # Penicillin          
+    0.176,       # Pentamidine         
+    0.194,       # Piperacillin/tazo.  
+    0.227,       # Posaconazole        
+    0.271,       # Remdesivir          
+    0.393,       # Rifampin            
+    0.453,       # SMX/TMP             
+    0.251,       # Tigecycline         
+    0.282        # Vancomycin         
   ),
+  
+  
   stringsAsFactors = FALSE
 )
 
 # Convenience column: kg CO2e per DOT (multiply metric tons by 1000)
-antibiotic_factors$co2e_per_dot_kg <- antibiotic_factors$co2e_per_dot_mt * 1000
+antimicrobial_factors$co2e_per_dot_kg <- 
+  antimicrobial_factors$co2e_per_dot_mt * 1000
 
 
 # ------------------------------------------------------------------------------
 # ghg_factors
 # ------------------------------------------------------------------------------
 # GHG equivalency conversion factors from U.S. EPA Emission Factors Hub (2024).
-# factor_per_mt_co2e : how many units of the equivalency equal 1 metric ton CO2e
-#
-# Factors derived from Figure 2B, Hojat et al. OFID 2025:
-#   875 DOT vancomycin = 0.0224421300 metric tons CO2e
-#                      = 57.39675 miles driven
-#                      = 2.52528 gallons of gasoline
-#                      = 24.74325 pounds of coal
-#                      = 1486.23377 smartphones charged
-# Back-calculated per-metric-ton rates are used here.
+# mt_co2e_per_unit : how many metric ton CO2e per 1 unit
+
 
 ghg_factors <- data.frame(
   equivalency = c(
@@ -225,11 +267,11 @@ ghg_factors <- data.frame(
     "Pounds of coal burned",
     "Smartphones charged"
   ),
-  factor_per_mt_co2e = c(
-    2557.8,    # miles per metric ton CO2e
-    112.5,     # gallons per metric ton CO2e
-    1102.6,    # pounds coal per metric ton CO2e
-    66227.0    # phones per metric ton CO2e
+  mt_co2e_per_unit = c(
+    0.000391,    # metric ton CO2e per mile driven
+    0.008887,    # metric ton CO2e per gallon of gas consumed
+    0.000907,    # metric ton CO2e per pound of coal burned
+    0.0000151    # metric ton CO2e per smartphone charged
   ),
   unit = c(
     "miles",
@@ -237,9 +279,9 @@ ghg_factors <- data.frame(
     "pounds",
     "phones"
   ),
-  source = rep(
-    "U.S. EPA GHG Emission Factors Hub (2024); Hojat et al. OFID 2025 Fig. 2B.",
-    4
-  ),
+
   stringsAsFactors = FALSE
 )
+
+
+
