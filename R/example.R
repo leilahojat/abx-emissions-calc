@@ -14,6 +14,7 @@
 #
 # Published result (Hojat et al., Fig. 2B):
 #   875 DOT IV vancomycin = 0.0224421300 metric tons CO2e
+#                         = 246.9 kg waste
 #                         = 57.4 miles driven
 #                         = 2.5 gallons of gasoline consumed
 #                         = 24.7 pounds of coal burned
