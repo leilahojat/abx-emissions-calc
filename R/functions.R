@@ -20,21 +20,22 @@
 # ------------------------------------------------------------------------------
 #' Estimate CO2-equivalent emissions for a single drug
 #'
-#' Looks up the emissions factor for the specified drug from antibiotic_factors
+#' Looks up the emissions factor for the specified drug from antimicrobial_factors
 #' and multiplies by the number of DOT to produce total CO2e and GHG
 #' equivalencies.
 #'
-#' @param drug_name Character. Must match a value in antibiotic_factors$drug_name.
+#' @param drug_name Character. Must match a value in antimicrobial_factors$drug_name.
 #'   Case-sensitive. Use list_drugs() to see available names.
 #' @param dot Numeric. Days of therapy (DOT). Must be non-negative.
 #' @param units Character. Output CO2e units: "mt" (metric tons, default) or "kg".
 #'
 #' @return Named numeric vector with the following elements:
-#'   co2e_mt       -- total CO2e in metric tons
-#'   co2e_kg       -- total CO2e in kilograms
-#'   miles_driven  -- GHG equivalency: miles driven (average passenger car)
-#'   gallons_gas   -- GHG equivalency: gallons of gasoline consumed
-#'   pounds_coal   -- GHG equivalency: pounds of coal burned
+#'   co2e_mt        -- total CO2e in metric tons
+#'   co2e_kg        -- total CO2e in kilograms
+#'   waste_kg       -- total waste generated in kg
+#'   miles_driven   -- GHG equivalency: miles driven (average passenger car)
+#'   gallons_gas    -- GHG equivalency: gallons of gasoline consumed
+#'   pounds_coal    -- GHG equivalency: pounds of coal burned
 #'   phones_charged -- GHG equivalency: smartphones charged
 #'
 #' @examples
@@ -55,48 +56,52 @@ calculate_emissions <- function(drug_name, dot, units = "mt") {
   }
   
   # Check that data frames are available
-  if (!exists("antibiotic_factors") || !exists("ghg_factors")) {
+  if (!exists("antimicrobial_factors") || !exists("ghg_factors")) {
     stop(
       "Data frames not found. Please run source('R/data.R') before calling this function."
     )
   }
   
   # Look up emissions factor
-  idx <- match(drug_name, antibiotic_factors$drug_name)
+  idx <- match(drug_name, antimicrobial_factors$drug_name)
   if (is.na(idx)) {
     stop(paste0(
-      "Drug '", drug_name, "' not found in antibiotic_factors.\n",
+      "Drug '", drug_name, "' not found in antimicrobial_factors.\n",
       "Run list_drugs() to see available drug names."
     ))
   }
   
-  factor_mt <- antibiotic_factors$co2e_per_dot_mt[idx]
+  factor_mt <- antimicrobial_factors$co2e_per_dot_mt[idx]
   if (is.na(factor_mt)) {
     stop(paste0(
       "Emissions factor for '", drug_name, "' is not yet populated.\n",
-      "Please add the per-DOT CO2e value from Supplementary Table 6 of\n",
-      "Hojat et al., OFID 2025 (doi:10.1093/ofid/ofaf308) to antibiotic_factors."
+      "Please add the per-DOT CO2e value from Supplementary Calculator Reference tab of\n",
+      "Hojat et al., OFID 2025 (doi:10.1093/ofid/ofaf308) to antimicrobial_factors."
     ))
   }
   
-  # Calculate total CO2e
+  factor_waste <- antimicrobial_factors$waste_kg_per_dot[idx]
+  
+  # Calculate total CO2e and waste
   co2e_mt <- factor_mt * dot
   co2e_kg <- co2e_mt * 1000
+  waste_kg <- factor_waste * dot
   
   # Apply GHG equivalency factors
   # Use direct indexing via match() to avoid name-propagation from named vectors,
   # which would cause downstream subsetting by name to return NA.
   ef <- function(label) {
-    ghg_factors$factor_per_mt_co2e[match(label, ghg_factors$equivalency)]
+    ghg_factors$mt_co2e_per_unit[match(label, ghg_factors$equivalency)]
   }
   
   result <- c(
     co2e_mt        = co2e_mt,
     co2e_kg        = co2e_kg,
-    miles_driven   = co2e_mt * ef("Miles driven (average passenger car)"),
-    gallons_gas    = co2e_mt * ef("Gallons of gasoline consumed"),
-    pounds_coal    = co2e_mt * ef("Pounds of coal burned"),
-    phones_charged = co2e_mt * ef("Smartphones charged")
+    waste_kg       = waste_kg,
+    miles_driven   = co2e_mt / ef("Miles driven (average passenger car)"),
+    gallons_gas    = co2e_mt / ef("Gallons of gasoline consumed"),
+    pounds_coal    = co2e_mt / ef("Pounds of coal burned"),
+    phones_charged = co2e_mt / ef("Smartphones charged")
   )
   
   return(result)
@@ -112,21 +117,21 @@ calculate_emissions <- function(drug_name, dot, units = "mt") {
 #' module export) and returns per-drug and total facility emissions.
 #'
 #' @param usage_df Data frame with at minimum two columns:
-#'   drug_name (character) -- must match antibiotic_factors$drug_name
+#'   drug_name (character) -- must match antimicrobial_factors$drug_name
 #'   dot (numeric)         -- days of therapy
 #' @param units Character. "mt" or "kg".
 #' @param warn_missing Logical. If TRUE (default), warns for drugs with
 #'   unpopulated emissions factors rather than stopping.
 #'
 #' @return Data frame with all columns from usage_df plus:
-#'   co2e_mt, co2e_kg, miles_driven, gallons_gas, pounds_coal, phones_charged
+#'   co2e_mt, co2e_kg, waste_kg, miles_driven, gallons_gas, pounds_coal, phones_charged
 #'   A TOTAL row is appended at the bottom.
 #'
 #' @examples
 #' source("R/data.R")
 #' source("R/functions.R")
 #' usage <- data.frame(
-#'   drug_name = c("Vancomycin", "Ampicillin-sulbactam"),
+#'   drug_name = c("Vancomycin", "Ampicillin/sulbactam"),
 #'   dot       = c(1200, 800)
 #' )
 #' calculate_facility_emissions(usage)
@@ -143,7 +148,7 @@ calculate_facility_emissions <- function(usage_df, units = "mt", warn_missing = 
   }
   
   # Compute per-row emissions
-  metric_names <- c("co2e_mt", "co2e_kg", "miles_driven",
+  metric_names <- c("co2e_mt", "co2e_kg", "waste_kg", "miles_driven",
                     "gallons_gas", "pounds_coal", "phones_charged")
   
   row_results <- lapply(seq_len(nrow(usage_df)), function(i) {
@@ -192,11 +197,12 @@ calculate_facility_emissions <- function(usage_df, units = "mt", warn_missing = 
 #' source("R/functions.R")
 #' list_drugs()
 list_drugs <- function() {
-  if (!exists("antibiotic_factors")) {
-    stop("antibiotic_factors not found. Please run source('R/data.R') first.")
+  if (!exists("antimicrobial_factors")) {
+    stop("antimicrobial_factors not found. Please run source('R/data.R') first.")
   }
-  out <- antibiotic_factors[, c("drug_name", "nhsn_name", "route",
-                                "co2e_per_dot_mt", "co2e_per_dot_kg")]
+  out <- antimicrobial_factors[, c("drug_name", "nhsn_name", "route",
+                                "co2e_per_dot_mt", "co2e_per_dot_kg", 
+                                "waste_kg_per_dot")]
   out$factor_available <- !is.na(out$co2e_per_dot_mt)
   return(out)
 }
@@ -227,6 +233,7 @@ summarize_emissions <- function(emissions_result, drug_name = NULL, dot = NULL) 
   }
   cat(sprintf("\nCO2e (metric tons): %.8f\n", emissions_result["co2e_mt"]))
   cat(sprintf("CO2e (kg):          %.4f\n",   emissions_result["co2e_kg"]))
+  cat(sprintf("Waste generated (kg): %.3f\n", emissions_result["waste_kg"]))
   cat(sprintf("\nGHG equivalencies:\n"))
   cat(sprintf("  Miles driven (avg. passenger car): %.1f\n",  emissions_result["miles_driven"]))
   cat(sprintf("  Gallons of gasoline consumed:      %.1f\n",  emissions_result["gallons_gas"]))
